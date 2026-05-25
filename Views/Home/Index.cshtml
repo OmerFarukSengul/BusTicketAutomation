@@ -1,0 +1,54 @@
+﻿@model OtobusFinalProje.ViewModels.SeferAraViewModel
+
+@{
+    ViewData["Title"] = "Otobüs Bileti Ara";
+}
+
+<div class="container mt-5">
+    @if (TempData["Hata"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Hata"]</div>
+    }
+
+    <div class="card shadow p-4">
+        <h2 class="mb-4">Otobüs Bileti Ara</h2>
+
+        <form asp-controller="Sefer" asp-action="Listele" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Nereden</label>
+                    <select asp-for="NeredenSehirId" asp-items="Model.Sehirler" class="form-control">
+                        <option value="">Şehir seçiniz</option>
+                    </select>
+                    <span asp-validation-for="NeredenSehirId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Nereye</label>
+                    <select asp-for="NereyeSehirId" asp-items="Model.Sehirler" class="form-control">
+                        <option value="">Şehir seçiniz</option>
+                    </select>
+                    <span asp-validation-for="NereyeSehirId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tarih</label>
+                    <input asp-for="Tarih" type="date" class="form-control" />
+                    <span asp-validation-for="Tarih" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Ara</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

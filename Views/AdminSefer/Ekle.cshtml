@@ -1,0 +1,64 @@
+﻿@model OtobusFinalProje.Models.Seferler
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Yeni Sefer Ekle</h2>
+
+@if (TempData["Hata"] != null)
+{
+    <div class="alert alert-danger">@TempData["Hata"]</div>
+}
+
+<form asp-controller="AdminSefer" asp-action="Ekle" method="post" class="card p-3">
+    @Html.AntiForgeryToken()
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label>Rota</label>
+            <select asp-for="RotaId" asp-items="ViewBag.Rotalar" class="form-control">
+                <option value="">Rota seçiniz</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label>Firma</label>
+            <select asp-for="FirmaId" asp-items="ViewBag.Firmalar" class="form-control">
+                <option value="">Firma seçiniz</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label>Otobüs</label>
+            <select asp-for="OtobusId" asp-items="ViewBag.Otobusler" class="form-control">
+                <option value="">Otobüs seçiniz</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label>Kalkış Tarihi</label>
+            <input asp-for="KalkisTarihiSaat" type="datetime-local" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label>Varış Tarihi</label>
+            <input asp-for="VarisTarihiSaat" type="datetime-local" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label>Fiyat</label>
+            <input asp-for="Fiyat" type="number" step="0.01" class="form-control" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label>Açıklama</label>
+        <input asp-for="Aciklama" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">Kaydet</button>
+    <a href="/Admin/Sefer" class="btn btn-secondary mt-2">Geri Dön</a>
+</form>

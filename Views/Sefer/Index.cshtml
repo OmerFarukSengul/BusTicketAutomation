@@ -1,0 +1,28 @@
+﻿@model List<OtobusFinalProje.Models.Seferler>
+
+<h2>Seferler</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Firma</th>
+            <th>Güzergah</th>
+            <th>Kalkış</th>
+            <th>Fiyat</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Firma?.FirmaAdi</td>
+                <td>
+                    @item.Rota?.NeredenSehir?.SehirAdi →
+                    @item.Rota?.NereyeSehir?.SehirAdi
+                </td>
+                <td>@item.KalkisTarihiSaat</td>
+                <td>@item.Fiyat ₺</td>
+            </tr>
+        }
+    </tbody>
+</table>

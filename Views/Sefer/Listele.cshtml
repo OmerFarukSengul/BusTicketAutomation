@@ -1,0 +1,77 @@
+﻿@model List<OtobusFinalProje.ViewModels.SeferListeViewModel>
+
+@{
+    ViewData["Title"] = "Seferler";
+}
+
+<div class="container mt-4">
+    <h2>Seferler</h2>
+
+    @if (TempData["Uyari"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Uyari"]</div>
+    }
+
+    @if (TempData["Hata"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Hata"]</div>
+    }
+
+    @if (ViewBag.AramaTarih != null)
+    {
+        <p class="text-muted">Arama tarihi: @ViewBag.AramaTarih</p>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <strong>@item.FirmaAdi</strong>
+                        </div>
+
+                        <div class="col-md-3">
+                            <strong>@item.Nereden</strong>
+                            →
+                            <strong>@item.Nereye</strong>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div>Kalkış</div>
+                            <strong>@item.KalkisTarihiSaat.ToString("HH:mm")</strong>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div>Varış</div>
+                            <strong>@item.VarisTarihiSaat.ToString("HH:mm")</strong>
+                        </div>
+
+                        <div class="col-md-1">
+                            <strong>@item.Fiyat.ToString("N2") ₺</strong>
+                        </div>
+
+                        <div class="col-md-2 text-end">
+                            <a asp-controller="Rezervasyon"
+                               asp-action="Olustur"
+                               asp-route-seferId="@item.SeferId"
+                               asp-route-binisDurakId="@item.BinisDurakId"
+                               asp-route-inisDurakId="@item.InisDurakId"
+                               class="btn btn-primary">
+                                Koltuk Seç
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info">Sefer bulunamadı.</div>
+    }
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-3">Yeni Arama</a>
+</div>

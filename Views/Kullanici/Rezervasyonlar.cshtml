@@ -1,0 +1,70 @@
+﻿@model List<OtobusFinalProje.Models.Rezervasyonlar>
+
+@{
+    ViewData["Title"] = "Rezervasyonlarım";
+}
+
+<div class="container mt-4">
+    <h2>Rezervasyonlarım</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Henüz rezervasyonunuz yok.
+        </div>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <strong>@item.Sefer?.Firma?.FirmaAdi</strong><br />
+                            <small>PNR: @item.PnrNo</small>
+                        </div>
+
+                        <div class="col-md-3">
+                            <strong>
+                                @item.Sefer?.Rota?.NeredenSehir?.SehirAdi
+                                →
+                                @item.Sefer?.Rota?.NereyeSehir?.SehirAdi
+                            </strong>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div>Kalkış</div>
+                            <strong>@item.Sefer?.KalkisTarihiSaat.ToString("dd.MM HH:mm")</strong>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div>Tutar</div>
+                            <strong>@item.ToplamTutar.ToString("N2") ₺</strong>
+                        </div>
+
+                        <div class="col-md-2 text-end">
+                            <a asp-controller="Rezervasyon"
+                               asp-action="Detay"
+                               asp-route-id="@item.Id"
+                               class="btn btn-primary btn-sm">
+                                Detay
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div>
+                        <strong>Koltuklar:</strong>
+                        @string.Join(", ", item.RezervasyonKoltuklaris.Select(x => x.KoltukNo))
+                    </div>
+
+                </div>
+            </div>
+        }
+    }
+</div>

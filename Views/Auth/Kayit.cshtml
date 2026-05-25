@@ -1,0 +1,59 @@
+﻿@model OtobusFinalProje.ViewModels.KayitViewModel
+
+@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<div class="container mt-5" style="max-width:600px;">
+    <div class="card shadow p-4">
+        <h2>Kayıt Ol</h2>
+
+        @if (TempData["Hata"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Hata"]</div>
+        }
+
+        <form asp-action="Kayit" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Ad</label>
+                    <input asp-for="Ad" class="form-control" />
+                    <span asp-validation-for="Ad" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Soyad</label>
+                    <input asp-for="Soyad" class="form-control" />
+                    <span asp-validation-for="Soyad" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label>E-posta</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label>Telefon</label>
+                <input asp-for="Telefon" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label>Şifre</label>
+                <input asp-for="Sifre" type="password" class="form-control" />
+                <span asp-validation-for="Sifre" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label>Şifre Tekrar</label>
+                <input asp-for="SifreTekrar" type="password" class="form-control" />
+                <span asp-validation-for="SifreTekrar" class="text-danger"></span>
+            </div>
+
+            <button class="btn btn-success w-100">Kayıt Ol</button>
+        </form>
+    </div>
+</div>

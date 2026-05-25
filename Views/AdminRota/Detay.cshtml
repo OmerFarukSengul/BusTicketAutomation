@@ -1,0 +1,38 @@
+﻿@model OtobusFinalProje.Models.Rotalar
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var duraklar = ViewBag.Duraklar;
+}
+
+<h2>Rota Detay</h2>
+
+<div class="card p-3 mb-3">
+    <p><strong>Başlangıç:</strong> @Model.NeredenSehir?.SehirAdi</p>
+    <p><strong>Bitiş:</strong> @Model.NereyeSehir?.SehirAdi</p>
+    <p><strong>Mesafe:</strong> @Model.MesafeKm KM</p>
+    <p><strong>Süre:</strong> @Model.TahminiSureDakika DK</p>
+    <p><strong>Durum:</strong> @(Model.AktifMi ? "Aktif" : "Pasif")</p>
+</div>
+
+<h4>Duraklar</h4>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Sıra</th>
+            <th>Şehir</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in duraklar)
+        {
+            <tr>
+                <td>@item.SiraNo</td>
+                <td>@item.Sehir.SehirAdi</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/Admin/Rota" class="btn btn-secondary">Geri Dön</a>

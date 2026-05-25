@@ -1,0 +1,77 @@
+﻿@model List<OtobusFinalProje.Models.Firmalar>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Firmalar";
+}
+
+<h2>Firmalar</h2>
+
+@if (TempData["Basari"] != null)
+{
+    <div class="alert alert-success">@TempData["Basari"]</div>
+}
+
+@if (TempData["Hata"] != null)
+{
+    <div class="alert alert-danger">@TempData["Hata"]</div>
+}
+
+<form asp-action="Ekle" method="post" class="card p-3 mb-3">
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-4">
+            <label>Firma Adı</label>
+            <input name="firmaAdi" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Telefon</label>
+            <input name="telefon" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>E-posta</label>
+            <input name="email" class="form-control" />
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-success w-100">Ekle</button>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Firma</th>
+            <th>Telefon</th>
+            <th>E-posta</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.FirmaAdi</td>
+                <td>@item.Telefon</td>
+                <td>@item.Email</td>
+                <td>@(item.AktifMi ? "Aktif" : "Pasif")</td>
+                <td>
+                    <form asp-action="DurumDegistir" asp-route-id="@item.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-warning btn-sm">
+                            @(item.AktifMi ? "Pasif Yap" : "Aktif Yap")
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

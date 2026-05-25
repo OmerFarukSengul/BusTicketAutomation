@@ -1,0 +1,136 @@
+﻿@model OtobusFinalProje.ViewModels.RezervasyonOlusturViewModel
+
+@{
+    ViewData["Title"] = "Koltuk Seçimi";
+}
+
+<style>
+    .seat-input {
+        display: none;
+    }
+
+    .seat-box {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        user-select: none;
+        border: 3px solid transparent;
+    }
+
+    .seat-free {
+        background-color: #198754;
+        cursor: pointer;
+    }
+
+    .seat-full {
+        background-color: #dc3545;
+        cursor: not-allowed;
+        opacity: .85;
+    }
+
+    .seat-input:checked + .seat-box {
+        border-color: #0d6efd;
+        background-color: #0d6efd;
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="container mt-4">
+    <h2>Koltuk Seçimi</h2>
+
+    @if (TempData["Hata"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Hata"]</div>
+    }
+
+    @if (TempData["Basari"] != null)
+    {
+        <div class="alert alert-success">@TempData["Basari"]</div>
+    }
+
+    <div class="card p-3 mb-3">
+        <p><strong>Firma:</strong> @Model.FirmaAdi</p>
+        <p><strong>Güzergah:</strong> @Model.Nereden → @Model.Nereye</p>
+        <p><strong>Kalkış:</strong> @Model.KalkisTarihiSaat.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Varış:</strong> @Model.VarisTarihiSaat.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Fiyat:</strong> @Model.Fiyat.ToString("N2") ₺</p>
+    </div>
+
+    <form asp-controller="Rezervasyon" asp-action="Olustur" method="get" class="card p-3 mb-3">
+        <input type="hidden" name="seferId" value="@Model.SeferId" />
+
+        <div class="row">
+            <div class="col-md-5">
+                <label class="form-label">Biniş Durağı</label>
+                <select name="binisDurakId" class="form-control">
+                    @foreach (var item in Model.Duraklar)
+                    {
+                        <option value="@item.Value" selected="@(item.Value == Model.BinisDurakId.ToString())">
+                            @item.Text
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-5">
+                <label class="form-label">İniş Durağı</label>
+                <select name="inisDurakId" class="form-control">
+                    @foreach (var item in Model.Duraklar)
+                    {
+                        <option value="@item.Value" selected="@(item.Value == Model.InisDurakId.ToString())">
+                            @item.Text
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-secondary w-100">Koltukları Güncelle</button>
+            </div>
+        </div>
+    </form>
+
+    <form asp-controller="Rezervasyon" asp-action="Olustur" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="SeferId" />
+        <input type="hidden" asp-for="BinisDurakId" />
+        <input type="hidden" asp-for="InisDurakId" />
+
+        <div class="mb-3">
+            <span class="badge bg-success">Boş</span>
+            <span class="badge bg-danger">Dolu</span>
+            <span class="badge bg-primary">Seçili</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(4,60px); gap:10px;">
+            @for (int i = 1; i <= Model.KoltukSayisi; i++)
+            {
+                var dolu = Model.DoluKoltuklar.Contains(i);
+
+                if (dolu)
+                {
+                    <div class="seat-box seat-full">@i</div>
+                }
+                else
+                {
+                    <label>
+                        <input class="seat-input" type="radio" name="SecilenKoltukNo" value="@i" />
+                        <span class="seat-box seat-free">@i</span>
+                    </label>
+                }
+            }
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">
+            Rezervasyonu Tamamla
+        </button>
+    </form>
+</div>

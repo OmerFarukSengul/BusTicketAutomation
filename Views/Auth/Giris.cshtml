@@ -1,0 +1,44 @@
+﻿@model OtobusFinalProje.ViewModels.GirisViewModel
+
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="container mt-5" style="max-width:500px;">
+    <div class="card shadow p-4">
+        <h2>Giriş Yap</h2>
+
+        @if (TempData["Hata"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Hata"]</div>
+        }
+
+        @if (TempData["Basari"] != null)
+        {
+            <div class="alert alert-success">@TempData["Basari"]</div>
+        }
+
+        <form asp-action="Giris" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label>E-posta</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label>Şifre</label>
+                <input asp-for="Sifre" type="password" class="form-control" />
+                <span asp-validation-for="Sifre" class="text-danger"></span>
+            </div>
+
+            <button class="btn btn-primary w-100">Giriş Yap</button>
+        </form>
+
+        <div class="mt-3">
+            Hesabın yok mu?
+            <a asp-controller="Auth" asp-action="Kayit">Kayıt Ol</a>
+        </div>
+    </div>
+</div>

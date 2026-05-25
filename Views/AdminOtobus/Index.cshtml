@@ -1,0 +1,70 @@
+﻿@model List<OtobusFinalProje.Models.Otobusler>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Otobüsler</h2>
+
+@if (TempData["Basari"] != null)
+{
+    <div class="alert alert-success">@TempData["Basari"]</div>
+}
+
+@if (TempData["Hata"] != null)
+{
+    <div class="alert alert-danger">@TempData["Hata"]</div>
+}
+
+<form asp-action="Ekle" method="post" class="card p-3 mb-3">
+    <div class="row">
+
+        <div class="col-md-3">
+            <label>Firma</label>
+            <select name="FirmaId" class="form-control" asp-items="ViewBag.Firmalar"></select>
+        </div>
+
+        <div class="col-md-2">
+            <label>Plaka</label>
+            <input name="Plaka" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <label>Koltuk</label>
+            <input name="KoltukSayisi" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Model</label>
+            <input name="Model" class="form-control" />
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-success w-100">Ekle</button>
+        </div>
+
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Firma</th>
+            <th>Plaka</th>
+            <th>Koltuk</th>
+            <th>Model</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Firma?.FirmaAdi</td>
+                <td>@item.Plaka</td>
+                <td>@item.KoltukSayisi</td>
+                <td>@item.Model</td>
+            </tr>
+        }
+    </tbody>
+</table>

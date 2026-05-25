@@ -1,0 +1,82 @@
+﻿@model OtobusFinalProje.ViewModels.SehirViewModel
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Şehir Düzenle";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Şehir Düzenle</h2>
+
+    @if (TempData["Hata"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Hata"]
+        </div>
+    }
+
+    @if (TempData["Basari"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Basari"]
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <form action="/Admin/Sehir/Duzenle"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       asp-for="Id" />
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Şehir Adı
+                    </label>
+
+                    <input asp-for="SehirAdi"
+                           class="form-control"
+                           placeholder="Şehir adı giriniz" />
+
+                    <span asp-validation-for="SehirAdi"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="form-check mb-4">
+
+                    <input asp-for="AktifMi"
+                           class="form-check-input" />
+
+                    <label class="form-check-label">
+                        Aktif Mi
+                    </label>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Güncelle
+                </button>
+
+                <a href="/Admin/Sehir"
+                   class="btn btn-secondary">
+                    Geri Dön
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

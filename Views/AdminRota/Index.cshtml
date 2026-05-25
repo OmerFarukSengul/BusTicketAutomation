@@ -1,0 +1,60 @@
+﻿@model List<OtobusFinalProje.Models.Rotalar>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Rotalar</h2>
+
+@if (TempData["Basari"] != null)
+{
+    <div class="alert alert-success">@TempData["Basari"]</div>
+}
+
+@if (TempData["Hata"] != null)
+{
+    <div class="alert alert-danger">@TempData["Hata"]</div>
+}
+
+<a href="/Admin/Rota/Ekle" class="btn btn-primary mb-3">+ Yeni Rota</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th>Mesafe KM</th>
+            <th>Süre DK</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.NeredenSehir?.SehirAdi</td>
+                    <td>@item.NereyeSehir?.SehirAdi</td>
+                    <td>@item.MesafeKm</td>
+                    <td>@item.TahminiSureDakika</td>
+                    <td>@(item.AktifMi ? "Aktif" : "Pasif")</td>
+                    <td>
+                        <a href="/Admin/Rota/Detay/@item.Id" class="btn btn-info btn-sm">Detay</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center text-muted">
+                    Henüz rota yok.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

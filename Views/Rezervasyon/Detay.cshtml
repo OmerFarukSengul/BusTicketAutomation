@@ -1,0 +1,82 @@
+﻿@model OtobusFinalProje.Models.Rezervasyonlar
+
+@{
+    ViewData["Title"] = "Bilet Detayı";
+    var koltuklar = Model.RezervasyonKoltuklaris;
+}
+
+<div class="container mt-4">
+    @if (TempData["Basari"] != null)
+    {
+        <div class="alert alert-success">@TempData["Basari"]</div>
+    }
+
+    @if (TempData["Hata"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Hata"]</div>
+    }
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Bilet Detayı</h3>
+        </div>
+
+        <div class="card-body">
+            <div class="alert alert-info">
+                <strong>PNR:</strong> @Model.PnrNo
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Yolcu Bilgileri</h5>
+                    <p><strong>Ad Soyad:</strong> @Model.YolcuAd @Model.YolcuSoyad</p>
+                    <p><strong>Telefon:</strong> @Model.YolcuTelefon</p>
+                    <p><strong>E-posta:</strong> @(Model.YolcuEmail ?? "-")</p>
+                    <p><strong>Durum:</strong> @Model.Durum</p>
+                    <p><strong>Rezervasyon Tarihi:</strong> @Model.RezervasyonTarihi.ToString("dd.MM.yyyy HH:mm")</p>
+                </div>
+
+                <div class="col-md-6">
+                    <h5>Sefer Bilgileri</h5>
+                    <p><strong>Firma:</strong> @Model.Sefer?.Firma?.FirmaAdi</p>
+                    <p>
+                        <strong>Rota:</strong>
+                        @Model.Sefer?.Rota?.NeredenSehir?.SehirAdi
+                        →
+                        @Model.Sefer?.Rota?.NereyeSehir?.SehirAdi
+                    </p>
+                    <p><strong>Kalkış:</strong> @Model.Sefer?.KalkisTarihiSaat.ToString("dd.MM.yyyy HH:mm")</p>
+                    <p><strong>Varış:</strong> @Model.Sefer?.VarisTarihiSaat.ToString("dd.MM.yyyy HH:mm")</p>
+                    <p><strong>Tutar:</strong> @Model.ToplamTutar.ToString("N2") ₺</p>
+                </div>
+            </div>
+
+            <hr />
+
+            <h5>Koltuk ve Durak Bilgisi</h5>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Koltuk</th>
+                        <th>Biniş</th>
+                        <th>İniş</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var k in koltuklar)
+                    {
+                        <tr>
+                            <td>@k.KoltukNo</td>
+                            <td>@k.BinisDurak?.Sehir?.SehirAdi</td>
+                            <td>@k.InisDurak?.Sehir?.SehirAdi</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Ana Sayfa</a>
+            <a asp-controller="Rezervasyon" asp-action="Sorgula" class="btn btn-primary">PNR Sorgula</a>
+        </div>
+    </div>
+</div>

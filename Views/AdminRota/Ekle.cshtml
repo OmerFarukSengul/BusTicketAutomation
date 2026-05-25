@@ -1,0 +1,120 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Yeni Rota Ekle";
+}
+
+<h2>Yeni Rota Ekle</h2>
+
+@if (TempData["Hata"] != null)
+{
+    <div class="alert alert-danger">@TempData["Hata"]</div>
+}
+
+@if (TempData["Basari"] != null)
+{
+    <div class="alert alert-success">@TempData["Basari"]</div>
+}
+
+<form asp-controller="AdminRota" asp-action="Ekle" method="post" class="card p-3">
+    @Html.AntiForgeryToken()
+
+    <div class="alert alert-info">
+        İlk seçilen şehir başlangıç, son seçilen şehir bitiş kabul edilir.
+        Örneğin: Antalya → Burdur → Ankara.
+        Duraklara özel fiyatları rota kaydedildikten sonra detay sayfasından ekleyeceksiniz.
+    </div>
+
+    <div id="duraklar">
+        <div class="input-group mb-2 durak-satiri">
+            <span class="input-group-text durak-no">1</span>
+
+            <select name="durakSehirIdleri" class="form-control durak-select" asp-items="ViewBag.Sehirler" required>
+                <option value="">Şehir seçiniz</option>
+            </select>
+
+            <button type="button" class="btn btn-danger" onclick="durakSil(this)">Sil</button>
+        </div>
+
+        <div class="input-group mb-2 durak-satiri">
+            <span class="input-group-text durak-no">2</span>
+
+            <select name="durakSehirIdleri" class="form-control durak-select" asp-items="ViewBag.Sehirler" required>
+                <option value="">Şehir seçiniz</option>
+            </select>
+
+            <button type="button" class="btn btn-danger" onclick="durakSil(this)">Sil</button>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-outline-primary mb-3" onclick="durakEkle()">
+        + Durak Ekle
+    </button>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label>Mesafe KM</label>
+            <input name="mesafeKm" type="number" min="0" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label>Tahmini Süre DK</label>
+            <input name="tahminiSureDakika" type="number" min="0" class="form-control" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Kaydet</button>
+    <a href="/Admin/Rota" class="btn btn-secondary mt-2">Geri Dön</a>
+</form>
+
+@section Scripts {
+    <script>
+        function durakEkle() {
+            const alan = document.getElementById("duraklar");
+            const ilkSatir = document.querySelector(".durak-satiri");
+            const yeniSatir = ilkSatir.cloneNode(true);
+
+            yeniSatir.querySelector("select").value = "";
+
+            alan.appendChild(yeniSatir);
+            numaralariYenile();
+        }
+
+        function durakSil(button) {
+            const satirlar = document.querySelectorAll(".durak-satiri");
+
+            if (satirlar.length <= 2) {
+                alert("En az 2 şehir seçilmelidir.");
+                return;
+            }
+
+            button.closest(".durak-satiri").remove();
+            numaralariYenile();
+        }
+
+        function numaralariYenile() {
+            document.querySelectorAll(".durak-satiri").forEach((satir, index) => {
+                satir.querySelector(".durak-no").innerText = index + 1;
+            });
+        }
+
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const secilenler = Array.from(document.querySelectorAll(".durak-select"))
+                .map(x => x.value)
+                .filter(x => x !== "");
+
+            if (secilenler.length < 2) {
+                e.preventDefault();
+                alert("En az 2 şehir seçmelisiniz.");
+                return;
+            }
+
+            const tekrarVarMi = new Set(secilenler).size !== secilenler.length;
+
+            if (tekrarVarMi) {
+                e.preventDefault();
+                alert("Aynı şehir rotada birden fazla seçilemez.");
+                return;
+            }
+        });
+    </script>
+}
